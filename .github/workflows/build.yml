@@ -1,0 +1,20 @@
+name: Build & Test a Scala app
+
+on:
+  push:
+    branches-ignore:
+      - 'master'
+  workflow_call:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: coursier/cache-action@v6
+      - uses: coursier/setup-action@v1
+        with:
+          jvm: 8
+          apps: sbt
+      - run: sbt clean coverage test
+      - run: sbt coverageReport coveralls
